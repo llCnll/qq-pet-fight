@@ -1,19 +1,23 @@
 package cn.chennan.qqpetfight.http;
 
 import cn.chennan.qqpetfight.common.json.JsonUtil;
-import cn.chennan.qqpetfight.common.result.BasicResult;
+import cn.chennan.qqpetfight.common.result.BasicPetResult;
+import cn.chennan.qqpetfight.common.result.Result;
 import cn.chennan.qqpetfight.config.OnceActivityConfig;
+import cn.chennan.qqpetfight.user.UserHttpUtil;
+import cn.chennan.qqpetfight.user.entity.UserInfo;
+import cn.chennan.qqpetfight.user.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,9 +26,13 @@ import java.util.List;
  */
 @SpringBootTest
 class RestTemplateTests {
+    private static final Logger logger = LoggerFactory.getLogger(RestTemplateTests.class);
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private UserService userService;
 
     List<String> dailyUrls = Lists.newArrayList(
             // 好礼步步升(7天)
@@ -47,54 +55,50 @@ class RestTemplateTests {
     void testRestTemplate() throws Exception {
         //{"result":"-2","msg":"很抱歉，系统繁忙，请稍后再试!"}
         // 登录态需要 skey和uin的值
-        HttpHeaders headers = new HttpHeaders();
-        List<String> cookies = new ArrayList<>();
-        cookies.add("skey=@");
-        cookies.add("uin=o0");
-        headers.put(HttpHeaders.COOKIE, cookies);
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-
-        dailyUrls.forEach(url -> {
-            sendHttp(requestEntity, url);
-        });
+        Result<List<UserInfo>> userListResult = userService.userList();
+        if (!userListResult.success()) {
+            logger.warn("获得用户列表失败");
+        }
+        userListResult.getData().forEach(user -> dailyUrls.forEach(url -> logger.info("{} - {}", user.getName(), sendHttp(UserHttpUtil.getHttpEntity(user), url))));
     }
 
     @Test
     void testOnceActivity() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        List<String> cookies = new ArrayList<>();
-        cookies.add("skey=@");
-        cookies.add("uin=o0");
-        headers.put(HttpHeaders.COOKIE, cookies);
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-
-        for (OnceActivityConfig config : OnceActivityConfig.values()) {
-            if (config.isArg()) {
-                for (int i = config.getStart(); i <= config.getEnd(); ++i) {
-                    int retry = 0;
-                    for (int j = 0; j < config.getCount(); ++j) {
-                        BasicResult ans = sendHttp(requestEntity, String.format(config.getUrl(), i));
-                        while (ans.isSystemError() && retry < 500) {
-                            ans = sendHttp(requestEntity, String.format(config.getUrl(), i));
-                            retry++;
-                        }
-                        System.out.println(config + " --> " + i + " --> " + j + "次 --> " + ans);
-                    }
-                }
-                System.out.println("----------------->" + config + " finish");
-            }
+        Result<List<UserInfo>> userListResult = userService.userList();
+        if (!userListResult.success()) {
+            logger.warn("获得用户列表失败");
         }
+
+        userListResult.getData().forEach(user -> {
+            HttpEntity<String> requestEntity = UserHttpUtil.getHttpEntity(user);
+            for (OnceActivityConfig config : OnceActivityConfig.values()) {
+                if (config.isArg()) {
+                    for (int i = config.getStart(); i <= config.getEnd(); ++i) {
+                        int retry = 0;
+                        for (int j = 0; j < config.getCount(); ++j) {
+                            BasicPetResult ans = sendHttp(requestEntity, String.format(config.getUrl(), i));
+                            while (ans.isSystemError() && retry < 500) {
+                                ans = sendHttp(requestEntity, String.format(config.getUrl(), i));
+                                retry++;
+                            }
+                            System.out.println(user.getName() + " --> " + "config + " + "-- > " + i + "-- > " + j + "次-- > " + ans);
+                        }
+                    }
+                    System.out.println("---------" + user.getName() + "-------->" + config + " finish");
+                }
+            }
+        });
     }
 
-    private BasicResult sendHttp(HttpEntity<String> requestEntity, String url) {
+    private BasicPetResult sendHttp(HttpEntity<String> requestEntity, String url) {
         String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-        BasicResult ans = null;
+        BasicPetResult ans = null;
         try {
-            ans = JsonUtil.jsonToObject(body, new TypeReference<BasicResult>() {
+            ans = JsonUtil.jsonToObject(body, new TypeReference<BasicPetResult>() {
             });
         } catch (Exception e) {
             System.out.println("发生了异常: " + e);
-            BasicResult basicResult = new BasicResult();
+            BasicPetResult basicResult = new BasicPetResult();
             basicResult.setResult(-2);
             return basicResult;
         }

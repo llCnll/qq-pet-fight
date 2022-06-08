@@ -4,7 +4,7 @@ package cn.chennan.qqpetfight.common.result;
  * @author cn
  * @date 2022-06-07 23:30
  */
-public class BasicResult {
+public class BasicPetResult {
     /**
      * 0: 正常
      * -1: 今天已经领取过了，明天再来哦！* 免费次数不足
@@ -40,7 +40,7 @@ public class BasicResult {
 
     @Override
     public String toString() {
-        return "BasicResult{" +
+        return "{" +
                 "result=" + result +
                 ", msg='" + msg + '\'' +
                 '}';
