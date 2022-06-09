@@ -16,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -90,6 +93,29 @@ class RestTemplateTests {
         });
     }
 
+    @Test
+    public void testRunList() {
+        try {
+            List<String> urls = Files.readAllLines(Paths.get("src", "test", "resources", "runlist.txt"));
+            List<UserInfo> userList = userService.userList().getData();
+            String title = "no title";
+            for (String url : urls) {
+                if (url.startsWith("#")) {
+                    title = url;
+                    continue;
+                }
+                if (!StringUtils.hasLength(url)) {
+                    continue;
+                }
+                for (UserInfo user : userList) {
+                    sendHttp(UserHttpUtil.getHttpEntity(user), url, 0, title, user.getName());
+                }
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+        }
+    }
+
     private BasicPetResult sendHttp(HttpEntity<String> requestEntity, String url) {
         String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
         BasicPetResult ans = null;
@@ -101,6 +127,28 @@ class RestTemplateTests {
             BasicPetResult basicResult = new BasicPetResult();
             basicResult.setResult(-2);
             return basicResult;
+        }
+        return ans;
+    }
+
+    private BasicPetResult sendHttp(HttpEntity<String> requestEntity, String url, int retry, String title, String account) {
+        if (retry > 10) {
+            BasicPetResult basicPetResult = new BasicPetResult();
+            basicPetResult.setMsg(String.format("%s - %s - %s 重试达到达上限", account, title, url));
+            return basicPetResult;
+        }
+        String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+        BasicPetResult ans = null;
+        try {
+            ans = JsonUtil.jsonToObject(body, new TypeReference<BasicPetResult>() {
+            });
+            logger.info("{} - {} - retry:{} - {}", account, title, retry, ans);
+        } catch (Exception e) {
+            System.out.println("发生了异常: " + e);
+            return sendHttp(requestEntity, url, retry + 1, title, account);
+        }
+        if (ans.getResult() == -5 || ans.getMsg().contains("系统繁忙")) {
+            return sendHttp(requestEntity, url, retry + 1, title, account);
         }
         return ans;
     }
