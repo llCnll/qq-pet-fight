@@ -2,6 +2,7 @@ package cn.chennan.qqpetfight.http;
 
 import cn.chennan.qqpetfight.common.json.JsonUtil;
 import cn.chennan.qqpetfight.common.result.BasicPetResult;
+import cn.chennan.qqpetfight.common.result.PetJsonUtil;
 import cn.chennan.qqpetfight.common.result.Result;
 import cn.chennan.qqpetfight.config.OnceActivityConfig;
 import cn.chennan.qqpetfight.user.UserHttpUtil;
@@ -9,6 +10,7 @@ import cn.chennan.qqpetfight.user.entity.UserInfo;
 import cn.chennan.qqpetfight.user.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.assertj.core.util.Lists;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +96,7 @@ class RestTemplateTests {
     }
 
     @Test
-    public void testRunList() {
+    void testRunList() {
         try {
             List<String> urls = Files.readAllLines(Paths.get("src", "test", "resources", "runlist.txt"));
             List<UserInfo> userList = userService.userList().getData();
@@ -131,25 +133,23 @@ class RestTemplateTests {
         return ans;
     }
 
-    private BasicPetResult sendHttp(HttpEntity<String> requestEntity, String url, int retry, String title, String account) {
+    private void sendHttp(HttpEntity<String> requestEntity, String url, int retry, String title, String account) {
         if (retry > 10) {
-            BasicPetResult basicPetResult = new BasicPetResult();
-            basicPetResult.setMsg(String.format("%s - %s - %s 重试达到达上限", account, title, url));
-            return basicPetResult;
+            logger.warn("{} - {} - {} 重试达到达上限", account, title, url);
+            return;
         }
         String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-        BasicPetResult ans = null;
+        JSONObject ans = null;
         try {
-            ans = JsonUtil.jsonToObject(body, new TypeReference<BasicPetResult>() {
-            });
+            ans = new JSONObject(body);
             logger.info("{} - {} - retry:{} - {}", account, title, retry, ans);
         } catch (Exception e) {
             System.out.println("发生了异常: " + e);
-            return sendHttp(requestEntity, url, retry + 1, title, account);
+            sendHttp(requestEntity, url, retry + 1, title, account);
+            return ;
         }
-        if (ans.getResult() == -5 || ans.getMsg().contains("系统繁忙")) {
-            return sendHttp(requestEntity, url, retry + 1, title, account);
+        if (PetJsonUtil.isNotLogin(ans) || PetJsonUtil.isSystemBusy(ans)) {
+            sendHttp(requestEntity, url, retry + 1, title, account);
         }
-        return ans;
     }
 }
