@@ -1,14 +1,11 @@
 package cn.chennan.qqpetfight.http;
 
-import cn.chennan.qqpetfight.common.json.JsonUtil;
-import cn.chennan.qqpetfight.common.result.BasicPetResult;
 import cn.chennan.qqpetfight.common.result.PetJsonUtil;
 import cn.chennan.qqpetfight.common.result.Result;
 import cn.chennan.qqpetfight.config.OnceActivityConfig;
 import cn.chennan.qqpetfight.user.UserHttpUtil;
 import cn.chennan.qqpetfight.user.entity.UserInfo;
 import cn.chennan.qqpetfight.user.service.UserService;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.assertj.core.util.Lists;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -64,7 +61,7 @@ class RestTemplateTests {
         if (!userListResult.success()) {
             logger.warn("获得用户列表失败");
         }
-        userListResult.getData().forEach(user -> dailyUrls.forEach(url -> logger.info("{} - {}", user.getName(), sendHttp(UserHttpUtil.getHttpEntity(user), url))));
+        userListResult.getData().forEach(user -> dailyUrls.forEach(url -> sendHttp(UserHttpUtil.getHttpEntity(user), url, 0, url, user.getName())));
     }
 
     @Test
@@ -79,17 +76,11 @@ class RestTemplateTests {
             for (OnceActivityConfig config : OnceActivityConfig.values()) {
                 if (config.isArg()) {
                     for (int i = config.getStart(); i <= config.getEnd(); ++i) {
-                        int retry = 0;
                         for (int j = 0; j < config.getCount(); ++j) {
-                            BasicPetResult ans = sendHttp(requestEntity, String.format(config.getUrl(), i));
-                            while (ans.isSystemError() && retry < 500) {
-                                ans = sendHttp(requestEntity, String.format(config.getUrl(), i));
-                                retry++;
-                            }
-                            System.out.println(user.getName() + " --> " + "config + " + "-- > " + i + "-- > " + j + "次-- > " + ans);
+                            sendHttp(requestEntity, String.format(config.getUrl(), i), 0, config.toString(), user.getName());
                         }
                     }
-                    System.out.println("---------" + user.getName() + "-------->" + config + " finish");
+                    logger.info("---------" + user.getName() + "-------->" + config + " finish");
                 }
             }
         });
@@ -118,27 +109,17 @@ class RestTemplateTests {
         }
     }
 
-    private BasicPetResult sendHttp(HttpEntity<String> requestEntity, String url) {
-        String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-        BasicPetResult ans = null;
-        try {
-            ans = JsonUtil.jsonToObject(body, new TypeReference<BasicPetResult>() {
-            });
-        } catch (Exception e) {
-            System.out.println("发生了异常: " + e);
-            BasicPetResult basicResult = new BasicPetResult();
-            basicResult.setResult(-2);
-            return basicResult;
-        }
-        return ans;
-    }
-
     private void sendHttp(HttpEntity<String> requestEntity, String url, int retry, String title, String account) {
         if (retry > 10) {
             logger.warn("{} - {} - {} 重试达到达上限", account, title, url);
             return;
         }
         String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+        if (!StringUtils.hasLength(body)) {
+            logger.info("{} - {} - retry:{} - {}", account, title, retry, "响应结果为空");
+            sendHttp(requestEntity, url, retry + 1, title, account);
+            return;
+        }
         JSONObject ans = null;
         try {
             ans = new JSONObject(body);
@@ -146,7 +127,7 @@ class RestTemplateTests {
         } catch (Exception e) {
             System.out.println("发生了异常: " + e);
             sendHttp(requestEntity, url, retry + 1, title, account);
-            return ;
+            return;
         }
         if (PetJsonUtil.isNotLogin(ans) || PetJsonUtil.isSystemBusy(ans)) {
             sendHttp(requestEntity, url, retry + 1, title, account);
