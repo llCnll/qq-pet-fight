@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -106,6 +107,29 @@ class RestTemplateTests {
             }
         } catch (Exception e) {
             logger.error("", e);
+        }
+    }
+
+    @Test
+    void testSelfRunList() {
+        List<UserInfo> userList = userService.userList().getData();
+        for (UserInfo user : userList) {
+            try {
+                List<String> urls = Files.readAllLines(Paths.get("src", "test", "resources", "runlist." + user.getName() + ".txt"));
+                String title = "no title";
+                for (String url : urls) {
+                    if (url.startsWith("#")) {
+                        title = url;
+                        continue;
+                    }
+                    if (!StringUtils.hasLength(url)) {
+                        continue;
+                    }
+                    sendHttp(UserHttpUtil.getHttpEntity(user), url, 0, title, user.getName());
+                }
+            } catch (IOException e) {
+                logger.warn("[{}]没有自定义运行文件", user.getName());
+            }
         }
     }
 
