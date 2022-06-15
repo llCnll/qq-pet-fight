@@ -134,27 +134,31 @@ class RestTemplateTests {
     }
 
     private void sendHttp(HttpEntity<String> requestEntity, String url, int retry, String title, String account) {
-        if (retry > 10) {
-            logger.warn("{} - {} - {} 重试达到达上限", account, title, url);
-            return;
-        }
-        String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
-        if (!StringUtils.hasLength(body)) {
-            logger.info("{} - {} - retry:{} - {}", account, title, retry, "响应结果为空");
-            sendHttp(requestEntity, url, retry + 1, title, account);
-            return;
-        }
-        JSONObject ans = null;
         try {
-            ans = new JSONObject(body);
-            logger.info("{} - {} - retry:{} - {}", account, title, retry, ans);
-        } catch (Exception e) {
-            System.out.println("发生了异常: " + e);
-            sendHttp(requestEntity, url, retry + 1, title, account);
-            return;
-        }
-        if (PetJsonUtil.isNotLogin(ans) || PetJsonUtil.isSystemBusy(ans)) {
-            sendHttp(requestEntity, url, retry + 1, title, account);
+            if (retry > 10) {
+                logger.warn("{} - {} - {} 重试达到达上限", account, title, url);
+                return;
+            }
+            String body = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class).getBody();
+            if (!StringUtils.hasLength(body)) {
+                logger.info("{} - {} - retry:{} - {}", account, title, retry, "响应结果为空");
+                sendHttp(requestEntity, url, retry + 1, title, account);
+                return;
+            }
+            JSONObject ans = null;
+            try {
+                ans = new JSONObject(body);
+                logger.info("{} - {} - retry:{} - {}", account, title, retry, ans);
+            } catch (Exception e) {
+                logger.error("发生了异常, {} - {} - retry:{}", account, title, retry, e);
+                sendHttp(requestEntity, url, retry + 1, title, account);
+                return;
+            }
+            if (PetJsonUtil.isNotLogin(ans) || PetJsonUtil.isSystemBusy(ans)) {
+                sendHttp(requestEntity, url, retry + 1, title, account);
+            }
+        } catch (Throwable e) {
+            logger.error("发生了异常, {} - {} - retry:{}", account, title, retry, e);
         }
     }
 }
