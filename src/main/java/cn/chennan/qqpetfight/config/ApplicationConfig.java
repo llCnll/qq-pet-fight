@@ -1,11 +1,9 @@
 package cn.chennan.qqpetfight.config;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.Duration;
 
 /**
  * @author cn
@@ -14,9 +12,10 @@ import java.time.Duration;
 @Configuration
 public class ApplicationConfig {
     @Bean
-    public RestTemplate getRestTemplate(RestTemplateBuilder builder) {
-        builder.setReadTimeout(Duration.ofSeconds(2));
-        builder.setConnectTimeout(Duration.ofSeconds(2));
-        return builder.build();
+    public RestTemplate getRestTemplate() {
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(2000);
+        requestFactory.setReadTimeout(3000);
+        return new RestTemplate(requestFactory);
     }
 }

@@ -159,6 +159,7 @@ class RestTemplateTests {
             }
         } catch (Throwable e) {
             logger.error("发生了异常, {} - {} - retry:{}", account, title, retry, e);
+            sendHttp(requestEntity, url, retry + 1, title, account);
         }
     }
 }
