@@ -12,10 +12,15 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=141&itemId=17&op=3
 #长安盛会(一次性)
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=1&subtype=110&op=1
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=2&subtype=110&op=1
+#长安盛会-
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=3&subtype=110&op=1
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=3&subtype=110&op=1
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=3&subtype=110&op=1
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=3&subtype=110&op=1
+#长安盛会-贵妃懿旨
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=5&subtype=110&op=1
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=5&subtype=110&op=1
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&id=5&subtype=110&op=1
 
 #好礼步步升(7天)
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=37&op=1
@@ -228,3 +233,31 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=fight&puin=16
 
 #好友-俊猴王
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=fight&puin=12
+
+#乐斗十二周年生日祝福
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=154&op=2&day=1
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=154&op=2&day=2
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=154&op=2&day=3
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=154&op=2&day=4
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=154&op=2&day=5
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=154&op=2&day=6
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=154&op=2&day=7
+
+#时空波动-浩劫宝箱
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=143
+
+#乐斗菜单-魂珠套餐
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=menuact&sub=1&gift=1
+#乐斗菜单-五行套餐
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=menuact&sub=1&gift=2
+#乐斗菜单-经验套餐
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=menuact&sub=1&gift=3
+#乐斗菜单-强化套餐
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=menuact&sub=1&gift=4
+#乐斗菜单-超值套餐
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=menuact&sub=1&gift=5
+
+#幸运转盘-查询剩余次数
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=50
+#幸运转盘-转动转盘
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&op=roll&subtype=50
