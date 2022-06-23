@@ -183,6 +183,12 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=3
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=4
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=5
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=6
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=7
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=8
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=9
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=10
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=11
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=12
 
 #羊皮*66 (待定:少截了一些包)
 #https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&sub_type=1&subtype=122&op=3
@@ -194,7 +200,7 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=162&op=2&taskid=6
 #https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&index=0&subtype=112&op=1
 
 #神魔转盘
-#https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&op=1&subtype=81
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&op=1&subtype=81
 
 #幸运金蛋每日11:00-14:00
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&index=0&subtype=102&op=1
@@ -261,3 +267,6 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=menuact&sub=1&gift=5
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=50
 #幸运转盘-转动转盘
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&op=roll&subtype=50
+
+#娃娃机
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=114&op=1
