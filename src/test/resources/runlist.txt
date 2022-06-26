@@ -270,3 +270,19 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&op=roll&subtype=50
 
 #娃娃机
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=114&op=1
+
+#登录有礼
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=49&op=draw&gift_type=1&gift_index=0
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=49&op=draw&gift_type=1&gift_index=1
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=49&op=draw&gift_type=1&gift_index=2
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=49&op=draw&gift_type=1&gift_index=3
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=49&op=draw&gift_type=1&gift_index=4
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=49&op=draw&gift_type=1&gift_index=5
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=newAct&subtype=49&op=draw&gift_type=1&gift_index=6
+
+#猜单双
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=2
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=1
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=2
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=1
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=1
