@@ -286,3 +286,6 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=1
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=2
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=1
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=oddeven&value=1
+
+#徽章战令-每日礼包
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=badge&op=1
