@@ -1,5 +1,7 @@
 package cn.chennan.qqpetfight.user.entity;
 
+import com.google.common.base.Objects;
+
 /**
  * @author cn
  * @date 2022-06-08 23:00
@@ -40,6 +42,19 @@ public class UserInfo {
 
     public void setUin(String uin) {
         this.uin = uin;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserInfo userInfo = (UserInfo) o;
+        return Objects.equal(name, userInfo.name) && Objects.equal(uin, userInfo.uin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name, uin);
     }
 
     @Override

@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -58,7 +59,7 @@ class RestTemplateTests {
     void testRestTemplate() throws Exception {
         //{"result":"-2","msg":"很抱歉，系统繁忙，请稍后再试!"}
         // 登录态需要 skey和uin的值
-        Result<List<UserInfo>> userListResult = userService.userList();
+        Result<Collection<UserInfo>> userListResult = userService.userList();
         if (!userListResult.success()) {
             logger.warn("获得用户列表失败");
         }
@@ -67,7 +68,7 @@ class RestTemplateTests {
 
     @Test
     void testOnceActivity() throws Exception {
-        Result<List<UserInfo>> userListResult = userService.userList();
+        Result<Collection<UserInfo>> userListResult = userService.userList();
         if (!userListResult.success()) {
             logger.warn("获得用户列表失败");
         }
@@ -91,7 +92,7 @@ class RestTemplateTests {
     void testRunList() {
         try {
             List<String> urls = Files.readAllLines(Paths.get("src", "test", "resources", "runlist.txt"));
-            List<UserInfo> userList = userService.userList().getData();
+            Collection<UserInfo> userList = userService.userList().getData();
             String title = "no title";
             for (String url : urls) {
                 if (url.startsWith("#")) {
@@ -112,7 +113,7 @@ class RestTemplateTests {
 
     @Test
     void testSelfRunList() {
-        List<UserInfo> userList = userService.userList().getData();
+        Collection<UserInfo> userList = userService.userList().getData();
         for (UserInfo user : userList) {
             try {
                 List<String> urls = Files.readAllLines(Paths.get("src", "test", "resources", "runlist." + user.getName() + ".txt"));
