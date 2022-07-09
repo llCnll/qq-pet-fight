@@ -34,6 +34,6 @@ public class UserService implements ApplicationContextAware {
     }
 
     public Result<Collection<UserInfo>> userList() {
-        return iUserStrategyServiceMap.get(UserStrategy.COOKIE_FILE).getUserList();
+        return iUserStrategyServiceMap.get(UserStrategy.REMOTE_COOKIE_FILE).getUserList();
     }
 }

@@ -6,5 +6,5 @@ package cn.chennan.qqpetfight.user.constant;
  */
 public enum UserStrategy {
     CUSTOM(),
-    COOKIE_FILE();
+    REMOTE_COOKIE_FILE();
 }

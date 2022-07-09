@@ -29,7 +29,7 @@ public class CookieFileUserStrategyServiceImpl implements IUserStrategyService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${cookie.file.url}")
+    @Value("${remote.cookie.file.url}")
     private String cookieFileUrl;
 
     @Override
@@ -49,7 +49,7 @@ public class CookieFileUserStrategyServiceImpl implements IUserStrategyService {
                                 .trimResults()
                                 .withKeyValueSeparator("=")
                                 .split(cookieLine);
-                        userInfos.add(new UserInfo(cookieMap.get("uin"), cookieMap.get("skey"), cookieMap.get("uin")));
+                        userInfos.add(new UserInfo(cookieMap.get("uin").substring(2), cookieMap.get("skey"), cookieMap.get("uin")));
                     } catch (Exception e) {
                         logger.error("解析cookie发生异常: [{}]", cookieLine, e);
                     }
@@ -59,6 +59,6 @@ public class CookieFileUserStrategyServiceImpl implements IUserStrategyService {
 
     @Override
     public UserStrategy getUserStrategy() {
-        return UserStrategy.COOKIE_FILE;
+        return UserStrategy.REMOTE_COOKIE_FILE;
     }
 }
