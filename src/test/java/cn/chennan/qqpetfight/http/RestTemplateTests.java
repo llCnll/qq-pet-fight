@@ -55,7 +55,7 @@ class RestTemplateTests {
             "https://fight.pet.qq.com/cgi-bin/petpk?cmd=luandou&id=15&op=8"
     );
 
-    @Test
+//    @Test
     void testRestTemplate() throws Exception {
         //{"result":"-2","msg":"很抱歉，系统繁忙，请稍后再试!"}
         // 登录态需要 skey和uin的值
@@ -66,7 +66,7 @@ class RestTemplateTests {
         userListResult.getData().forEach(user -> dailyUrls.forEach(url -> sendHttp(UserHttpUtil.getHttpEntity(user), url, 0, url, user.getName())));
     }
 
-    @Test
+//    @Test
     void testOnceActivity() throws Exception {
         Result<Collection<UserInfo>> userListResult = userService.userList();
         if (!userListResult.success()) {
@@ -91,7 +91,7 @@ class RestTemplateTests {
     @Test
     void testRunList() {
         try {
-            List<String> urls = Files.readAllLines(Paths.get("src", "test", "resources", "runlist.txt"));
+            List<String> urls = Files.readAllLines(Paths.get("src", "main", "resources", "runlist.txt"));
             Collection<UserInfo> userList = userService.userList().getData();
             String title = "no title";
             for (String url : urls) {
@@ -116,7 +116,7 @@ class RestTemplateTests {
         Collection<UserInfo> userList = userService.userList().getData();
         for (UserInfo user : userList) {
             try {
-                List<String> urls = Files.readAllLines(Paths.get("src", "test", "resources", "runlist." + user.getName() + ".txt"));
+                List<String> urls = Files.readAllLines(Paths.get("src", "main", "resources", "runlist." + user.getName() + ".txt"));
                 String title = "no title";
                 for (String url : urls) {
                     if (url.startsWith("#")) {
