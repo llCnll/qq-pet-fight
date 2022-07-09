@@ -292,3 +292,6 @@ https://fight.pet.qq.com/cgi-bin/petpk?cmd=badge&op=1
 
 #微信兑换
 https://fight.pet.qq.com/cgi-bin/petpk?cmd=weixin&sub=1&cdkey=123321
+
+#周周礼包
+https://fight.pet.qq.com/cgi-bin/petpk?cmd=weekgiftbag&sub=0
