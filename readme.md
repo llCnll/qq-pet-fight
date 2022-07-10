@@ -1,6 +1,5 @@
 # qq-pet-fight
 
-
 ## 一. 愿景
 替代QQFight辅助, 实现 **通用/高度可定制化** 产品.
 
@@ -32,20 +31,28 @@
 - 类: cn.chennan.qqpetfight.user.service.UserService 设置读取方式为 **UserStrategy.REMOTE_COOKIE_FILE**
 - 如何生成cookie文件
   - QQFight辅助(会自动更新登录态) + fiddler(抓包)
-  - 在fiddler脚本-OnBeforeRequest方法开头添加以下代码(c#代码), 文件将生成到 filename 路径下.
+  - 在fiddler脚本-OnBeforeRequest方法开头添加以下代码(c#代码), 文件将生成到 filename 路径下(如果没有文件, 先提前生成吧)
     - ```java
       if (oSession.fullUrl.Contains("fight.pet.qq.com")) {
               try {
                   var filename = "H:\\fiddler.txt"; 
-                  var logContent = oSession.oRequest["Cookie"];
-                  if ((new System.IO.FileInfo(filename)).Length < 1024*10) {
+                  // 最后分割符要与代码一致
+                  var logContent = oSession.oRequest["Cookie"] + "\r\n";
+                  // 文件超过1M就覆盖.
+                  if ((new System.IO.FileInfo(filename)).Length < 1024*1024) {
                       System.IO.File.AppendAllText(filename,logContent);
                   } else {
                       System.IO.File.WriteAllText(filename,logContent);
                   }
               }catch (Exception){}
           }
-  - 本人使用nginx的方式, 进行远程访问. (生成cookie文件是电脑A, 执行该程序是电脑B, 因此需要远程访问, 如果是同一台电脑, 可以新增读取本地文件的策略)
+  - 本人使用nginx的方式, 进行远程访问. (生成cookie文件是电脑A, 执行该程序是电脑B, 因此需要远程访问, 如果是同一台电脑, 可以使用读取本地文件的策略)
+
+#### 3.1.3 本地cookie文件
+- 通过本地文件, 并解析数据, 获得需要执行的用户登录态.
+- 类: cn.chennan.qqpetfight.user.service.UserService 设置读取方式为 **UserStrategy.LOCAL_COOKIE_FILE**
+- 如何生成cookie文件
+  - 同 **3.1.2**
     
 ### 3.2 执行脚本
 - cn.chennan.qqpetfight.http.RestTemplateTests#testRunList 使用这个test类.(暂时), 如功能描述3所说,获取读取resources/runlist.txt文件进行执行
