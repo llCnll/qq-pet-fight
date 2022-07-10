@@ -29,6 +29,7 @@
 #### 3.1.2 远程cookie文件
 - 通过拉取远程文件, 并解析数据, 获得需要执行的用户登录态.
 - 类: cn.chennan.qqpetfight.user.service.UserService 设置读取方式为 **UserStrategy.REMOTE_COOKIE_FILE**
+- 配置: application.properties - remote.cookie.file.url
 - 如何生成cookie文件
   - QQFight辅助(会自动更新登录态) + fiddler(抓包)
   - 在fiddler脚本-OnBeforeRequest方法开头添加以下代码(c#代码), 文件将生成到 filename 路径下(如果没有文件, 先提前生成吧)
@@ -51,6 +52,7 @@
 #### 3.1.3 本地cookie文件
 - 通过本地文件, 并解析数据, 获得需要执行的用户登录态.
 - 类: cn.chennan.qqpetfight.user.service.UserService 设置读取方式为 **UserStrategy.LOCAL_COOKIE_FILE**
+- 配置: application.properties - local.cookie.file.url
 - 如何生成cookie文件
   - 同 **3.1.2**
     
