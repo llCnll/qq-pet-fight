@@ -7,12 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * @author cn
- * @date 2022-07-10 00:09
+ * @date 2022-07-10 11:52
  */
 @SpringBootTest
-class CookieFileUserStrategyServiceImplTest {
+class LocalCookieFileUserStrategyServiceImplTest {
+
     @Autowired
-    private CookieFileUserStrategyServiceImpl service;
+    private LocalCookieFileUserStrategyServiceImpl service;
 
     @Test
     void getUserList() throws Exception {

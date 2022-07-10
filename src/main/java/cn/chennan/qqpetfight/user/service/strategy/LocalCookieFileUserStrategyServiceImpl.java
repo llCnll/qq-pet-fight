@@ -7,14 +7,14 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,25 +23,23 @@ import java.util.Set;
  * @date 2022-07-09 23:58
  */
 @Service
-public class CookieFileUserStrategyServiceImpl implements IUserStrategyService {
-    private static final Logger logger = LoggerFactory.getLogger(CookieFileUserStrategyServiceImpl.class);
+public class LocalCookieFileUserStrategyServiceImpl implements IUserStrategyService {
+    private static final Logger logger = LoggerFactory.getLogger(LocalCookieFileUserStrategyServiceImpl.class);
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Value("${remote.cookie.file.url}")
+    @Value("${local.cookie.file.url}")
     private String cookieFileUrl;
 
     @Override
     public Result<Collection<UserInfo>> getUserList() {
-        String cookieData = restTemplate.getForEntity(cookieFileUrl, String.class).getBody();
-        if (StringUtils.isEmpty(cookieData)) {
-            logger.warn("远程获取cookie file文件返回值为空");
+        List<String> cookieLines;
+        try {
+            cookieLines = Files.readAllLines(Paths.get(cookieFileUrl));
+        } catch (Exception ex) {
+            logger.error("读取本地cookie file文件返回值发生异常", ex);
             return Result.fail(-1, "返回值为空");
         }
-        String[] cookieLines = cookieData.split("\r\n");
         Set<UserInfo> userInfos = Sets.newHashSet();
-        Arrays.stream(cookieLines)
+        cookieLines.stream()
                 .filter(cookieLine -> !StringUtils.isEmpty(cookieLine))
                 .forEach(cookieLine -> {
                     try {
@@ -59,6 +57,6 @@ public class CookieFileUserStrategyServiceImpl implements IUserStrategyService {
 
     @Override
     public UserStrategy getUserStrategy() {
-        return UserStrategy.REMOTE_COOKIE_FILE;
+        return UserStrategy.LOCAL_COOKIE_FILE;
     }
 }
